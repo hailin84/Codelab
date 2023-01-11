@@ -9,7 +9,7 @@ import com.spring.InitializingBean;
  *
  * </p>
  *
- * @author hailin
+ * @author hailin84
  * @since 2023/1/10
  */
 @Component("orderService")
@@ -18,7 +18,7 @@ public class OrderService implements BeanNameAware, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("afterPropertiesSet");
+        System.out.println("afterPropertiesSet " + myName);
     }
 
     @Override

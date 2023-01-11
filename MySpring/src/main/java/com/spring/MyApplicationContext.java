@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 手写Spring的ApplicationContext类
  * </p>
  *
- * @author hailin
+ * @author hailin84
  * @since 2023/1/10
  */
 public class MyApplicationContext {
@@ -50,7 +50,13 @@ public class MyApplicationContext {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                String className = f.getAbsolutePath().substring(f.getAbsolutePath().indexOf(scanPath.replace("/", "\\")), f.getAbsolutePath().indexOf(".class"));
+                String filePath = f.getAbsolutePath();
+                // 只扫描.class文件，其他文件直接跳过
+                if (!filePath.endsWith(".class")) {
+                    continue;
+                }
+
+                String className = filePath.substring(filePath.indexOf(scanPath.replace("/", "\\")), filePath.indexOf(".class"));
                 className = className.replace("\\", ".");
                 try {
                     Class c = appClassLoader.loadClass(className);
@@ -72,7 +78,7 @@ public class MyApplicationContext {
                     }
                     beanDefinitionMap.put(beanName, d);
 
-                    // 选择这里直接初始化BeanPostProcessor，跟Spring不一样，忽略
+                    // 选择这里直接初始化BeanPostProcessor，跟Spring实现略不一样，忽略
                     if (BeanPostProcessor.class.isAssignableFrom(c)) {
                         try {
                             beanPostProcessorList.add((BeanPostProcessor) c.newInstance());
@@ -116,12 +122,12 @@ public class MyApplicationContext {
                 ((BeanNameAware) instance).setBeanName(beanName);
             }
 
-            // 初始化前
+            // 初始化，效果跟PostConstruct一样
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
                 instance = beanPostProcessor.postProcessBeforeInitialization(instance, beanName);
             }
 
-            // 初始化
+            // 初始化，InitializingBean
             if (instance instanceof InitializingBean) {
                 try {
                     ((InitializingBean) instance).afterPropertiesSet();
@@ -130,7 +136,9 @@ public class MyApplicationContext {
                 }
             }
 
-            // 初始化后
+            // 初始化后。如果是AOP则会产生代理对象，代理对象里的依赖不会自动注入。
+            // 代理对象里的target保存原来的普通对象，调用的时候先执行AOP方法逻辑，再调用
+            // target上的方法。
             for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
                 instance = beanPostProcessor.postProcessAfterInitialization(instance, beanName);
             }

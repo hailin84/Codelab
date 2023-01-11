@@ -1,16 +1,14 @@
 package org.alive.myspring.service;
 
 import com.spring.Autowired;
-import com.spring.BeanNameAware;
 import com.spring.Component;
-import com.spring.Scope;
 
 /**
  * <p>
  *
  * </p>
  *
- * @author hailin
+ * @author hailin84
  * @since 2023/1/10
  */
 @Component("userService")

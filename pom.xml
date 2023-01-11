@@ -19,6 +19,7 @@
         <module>Idealab</module>
         <module>Springlab</module>
         <module>MySpring</module>
+        <module>testcase</module>
     </modules>
 
 </project>

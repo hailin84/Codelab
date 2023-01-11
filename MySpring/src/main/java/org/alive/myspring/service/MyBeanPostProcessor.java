@@ -3,8 +3,6 @@ package org.alive.myspring.service;
 import com.spring.BeanPostProcessor;
 import com.spring.Component;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
@@ -12,7 +10,7 @@ import java.lang.reflect.Proxy;
  *
  * </p>
  *
- * @author hailin
+ * @author hailin84
  * @since 2023/1/10
  */
 @Component("myBeanPostProcessor")

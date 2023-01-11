@@ -5,7 +5,7 @@ package com.spring;
  * 仿Spring InitializingBean
  * </p>
  *
- * @author hailin
+ * @author hailin84
  * @since 2023/1/10
  */
 public interface InitializingBean {
