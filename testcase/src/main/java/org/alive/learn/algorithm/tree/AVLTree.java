@@ -6,8 +6,8 @@ package org.alive.learn.algorithm.tree;
  *
  * @author skywang
  * @date 2013/11/07
- * 
- * @see http://www.cnblogs.com/skywang12345/p/3577479.html
+ *
+ * @see <a href="http://www.cnblogs.com/skywang12345/p/3577479.html">skywang12345</a>
  */
 
 public class AVLTree<T extends Comparable<T>, V> {
