@@ -1,0 +1,3 @@
+This is a text document contains only ASCII chararters.
+Save it as UTF-8 without bom.
+No matter GBK or UTF-8, always detected as UTF-8.
