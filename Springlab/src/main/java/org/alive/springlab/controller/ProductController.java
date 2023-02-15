@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RReadWriteLock;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class ProductController {
     private Redisson redisson;
 
     @Resource
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @RequestMapping(path = "/addProduct", method = {RequestMethod.GET, RequestMethod.POST})
     public String addProduct(Product product) {
@@ -87,8 +88,8 @@ public class ProductController {
                     redisTemplate.opsForValue().set(RedisKeyConstants.getProductCacheKey(productId), JSON.toJSONString(product),
                             RedisKeyConstants.getProductCacheExpire(), TimeUnit.SECONDS);
                 } else {
-                    // 设置一个空缓存，防止缓存穿透问题，这个不需要设置超时时间。
-                    redisTemplate.opsForValue().set(RedisKeyConstants.getProductCacheKey(productId), RedisKeyConstants.EMPTY_CACHE);
+                    // 设置一个空缓存，防止缓存穿透问题，这个超时时间设置短一点，最长不要超过5分钟，因为这个数据是没什么意义的垃圾数据，仅仅为了应对请示高峰期的缓存穿透问题。
+                    redisTemplate.opsForValue().set(RedisKeyConstants.getProductCacheKey(productId), RedisKeyConstants.EMPTY_CACHE, 5 * 60, TimeUnit.SECONDS);
                 }
             } finally {
                 lock.readLock().unlock();
@@ -101,7 +102,7 @@ public class ProductController {
     }
 
     private Product getFromCache(Integer productId) {
-        String productStr = redisTemplate.opsForValue().get(RedisKeyConstants.getProductCacheKey(productId));
+        String productStr = (String) redisTemplate.opsForValue().get(RedisKeyConstants.getProductCacheKey(productId));
         if (StringUtils.isNotEmpty(productStr)) {
             if (RedisKeyConstants.EMPTY_CACHE.equals(productStr)) {
                 return new Product(); // 返回空对象，避免后续再去DB查询，因为已经可以确定这个产品在DB里是不存在的

@@ -118,16 +118,15 @@ public class ServerChannelThread extends Thread {
 				// (2) 调用selector.wakeUp；
 				// (3) select所在线程收到中断请求；
 				int num = selector.select(2000);
-				if (num == 0) { // someone may called wakeUp somewhere
+				if (num == 0) { // someone may call wakeUp somewhere
 					continue;
 				}
 
 				Set<SelectionKey> st = selector.selectedKeys();
-				Iterator<SelectionKey> it = st.iterator();
 
-				while (it.hasNext()) {
+				for (SelectionKey selectionKey : st) {
 					// SelectionKey key = (SelectionKey) it.next();
-					accept(it.next());
+					accept(selectionKey);
 				}
 				st.clear();
 			}

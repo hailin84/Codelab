@@ -1,6 +1,8 @@
 package org.alive.idealab.learn.jvm;
 
-
+/**
+ * 图灵学院诸葛老师JMM课程示例代码
+ */
 public class VolatileVisibilityTest {
     private static boolean initFlag = false;
     public static void main(String[] args) throws InterruptedException {
@@ -13,7 +15,12 @@ public class VolatileVisibilityTest {
     public static void loop() {
         System.out.println("================ start");
         while (!initFlag) {
-            //
+            // 加上sleep，不论initFlag是否volatile均可以正常结束
+//            try {
+//                Thread.sleep(0);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         }
         System.out.println("================ success");
     }
