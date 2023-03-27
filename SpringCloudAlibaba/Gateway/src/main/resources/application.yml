@@ -1,0 +1,25 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    # gateway配置
+    gateway:
+#      discovery:
+#        locator:
+#          enabled: true # 开启自动识别
+      # 路由规则
+      routes:
+        - id: order_route
+          uri: lb://order-service  # 需要转发的地址或者服务名
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - StripPrefix=1
+    # 配置nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        username: nacos
+        password: nacos

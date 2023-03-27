@@ -20,6 +20,7 @@
         <module>Springlab</module>
         <module>MySpring</module>
         <module>testcase</module>
+        <module>SpringCloudAlibaba</module>
     </modules>
 
 </project>
