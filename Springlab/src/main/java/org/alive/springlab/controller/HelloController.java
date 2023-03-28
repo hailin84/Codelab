@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @RestController
@@ -16,7 +17,9 @@ public class HelloController {
     }
 
     @RequestMapping(value = "/sayHello", method = {RequestMethod.GET})
-    public String sayHello() {
+    public String sayHello(HttpServletRequest request) {
+        String qs = request.getQueryString();
+        System.out.println(qs);
         return "Hello " + LocalDateTime.now();
     }
 }

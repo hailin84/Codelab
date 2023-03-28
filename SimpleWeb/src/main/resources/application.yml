@@ -1,0 +1,12 @@
+server:
+  name: simpleweb
+  port: 8099
+  # 1.X的配置方式
+  context-path: /simpleweb
+  # 2.X的配置方式
+  servlet:
+    context-path: /simpleweb
+
+logging:
+  level:
+    org.springframework: DEBUG
