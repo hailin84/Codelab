@@ -24,6 +24,7 @@ public class MyBatisPlusConfig {
      *
      * @return 防止全表更新与删除插件
      */
+    @Bean
     public BlockAttackInnerInterceptor blockAttackInnerInterceptor() {
         return new BlockAttackInnerInterceptor();
     }

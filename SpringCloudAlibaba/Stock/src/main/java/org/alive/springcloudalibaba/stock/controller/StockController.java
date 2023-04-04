@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StockController {
 
     @RequestMapping(value = "/deduct", method = {RequestMethod.GET, RequestMethod.POST})
-    public String deduct() {
+    public String deduct(HttpServletRequest request) {
         System.out.println("扣减库存成功");
         return "OK";
     }
