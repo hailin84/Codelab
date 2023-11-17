@@ -9,6 +9,8 @@ import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -131,42 +133,48 @@ public class RsaUtil {
         Security.addProvider(new BouncyCastleProvider());
         Security.addProvider(new BouncyCastlePQCProvider());
         Map<String, String> keyMap = new HashMap<>();
+        // server public key
         keyMap.put("PUBLIC", "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWFYNuLNMibZ/UeZmn1QIicyZ+KfuHIoearbo1lRJMpww8W45ZG7W6ArhwP7mATHNjIBl+/UTiZZbo5iRLqwYfEs68TmlymbG+hEOsRefkeqV5wDD43yCwYlsg9KnXuf/jopWtlC8wUH1uDcQ0cpPCvhxScu5XA3SF7BT336ioiwIDAQAB");
+
+        // server private key
         keyMap.put("PRIVATE", "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJYVg24s0yJtn9R5mafVAiJzJn4p+4cih5qtujWVEkynDDxbjlkbtboCuHA/uYBMc2MgGX79ROJllujmJEurBh8SzrxOaXKZsb6EQ6xF5+R6pXnAMPjfILBiWyD0qde5/+Oila2ULzBQfW4NxDRyk8K+HFJy7lcDdIXsFPffqKiLAgMBAAECgYEAg3rDUhCYwm9w9o20q4/yt8VS8nHK9T6ttzb8ixZWGqq5EGNQ2AVrdVIOy983ngrbhvpG+7Xa088VnmCHaXag+9I6iuRwq0JHNBGUF8lAvfT5I5umDI48cNogTuwJlhVeuOb2IWBNn6q/P+gBHKLDUtQEaq7MUV+sZYPgi0dBmRECQQD/ouWctOajk0e2AN05/jCr32CIe4nJaymiTblxIJtEGCNfbri4PgF3CkPFx21RJ3AJxhxMqfWImbXDACAj1SWpAkEAlkwsmGhE8cT9ZjGJqghkZmq0tKB9TZMtzRbrYoUccz6BzHgMovq6zMYFudCNKkdbIVoQu9UqZh4I89iaHMAVEwJARDHlhP9xQ5PHnpLucUkRHNiTPPWP1U6kJasMXFRxdyHlVdEIsAXCiEoRuFIyJGMb7U+PPxhb6tvudB21dTmoOQJAXkyW4lzxfPvKvXaxWBSB4dxrWrUjSSvh3b7Wmu7HhesfB0n/K7bCwz4vU4FtQKyamddnjmJVgtKvbUdmkklWLwJBAI8/XsHpNuPW03YXFIAhVBV1oceWfB3+h4JZPp+WAS07emD+tV7dqqCGLjlR+dWYIbK1BN9iQ76EfIBVliTXQF0=");
 
-        StringBuilder builder = new StringBuilder(1024);
 
-        // String data = "a=1&b=2&c=3";
+        // serverKey
+        // keyMap.put("PRIVATE", "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALSjvNQ9C1uZ5uQJ0XA27TcMc/qi3SoFxzhizGAWoRAVOpfk/zJqwsMw4aLX9B5zMHkGGHQt8aMJhaAobL1/Tt51KsegRxXh3xLLRvoumE8lZbbJmG61xgE/asHPb+Y7EUO1rUb9C03NBKPodY4VIW75Y3CkOPaC7Nju27kyLiJlAgMBAAECgYB2As53HZZQ9p+H9P4VwFyC7SjL4iB4tqOrK6h3UfFRL31DBIDQMD0jBcky+MBsMDbHqfrJ08YcDDl3I1G/Du+3fmvwaXz8spxBZRtHPNu5WpfTN3/6owVHA30Zdz6pLwkuLwBfWTlQxeQPvvNL766ln+L6gku2s/doGouJBwDBoQJBANudZvjMeZ0ArHapkMV2SU0A7S22hjOH3TSrxAxA+uKb9HUdYxtzJ3U0MUY1iBbcY0gnfvSBhdgrhbrbTAJZYykCQQDSkUPZi+a05stlHpWpebZzjybB00tSPHRWlfG5ZokPoRaLVCx1lnzRs5US8KfwurJiNAsN9y87f9KDSD7SIEjdAkAkh4D6P2C3KcaGElxfS/aTVWUeJm8aIS49NZjthN12VgSKenHivfvBNgZALGVPkCb/eHpYhzbRJyQeWZ3CAkZJAkEAju2ltZQ9/Iswgqn5ArmoO9Zug2BuHxsECQXst2E/Jcm9aMOxDfwhK6KPTPTnugKwNPKIkmk3uVZxSUWPxse9TQJAT4tYQBaAFkdZYgLkViW9312/Nx4N/g9kO0KX77yu6aAONHXN2djxIU9hhXwNA8PQ4OoHm7j55tQQaHSWIa4xaw==");// String data = "a=1&b=2&c=3";
 
+        testNormalData(keyMap);
+        // testQueryString(keyMap);
+    }
 
-        String data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123";
-        StringBuilder dataBuilder = new StringBuilder(data);
-        int length = 30;
-        while (length <= 2 * 1024 * 1024) {
-            dataBuilder.append(data);
-            length += 30;
-        }
-
-        data = dataBuilder.toString();
-        System.out.println("开始加密 " + data.length());
-        Stopwatch watch = Stopwatch.createStarted();
+    private static void testNormalData(Map<String, String> keyMap) throws Exception {
+        System.out.println("Normal:");
+        String data = "Hello DST";
+        data = "{\"phone\":\"13331234123\",\"verifyCode\":\"999999\",\"userName\":\"123\",\"typeCode\":\"000002\",\"registerExtendInfo\":{“labelId”: \"62\"}}";
         String ciphered = rsaEncrypt(data, keyMap.get("PUBLIC"));
-        watch.stop();
-        FileUtil.writeString(ciphered, "data.txt", "UTF-8");
-        // String raw = rsaDecrypt(ciphered, keyMap.get("PRIVATE"));
+        // ciphered = "C9R9IaWDEj+V5QLOVarr+4t5wg+JQlN3T8GQkPdxnJV28rwYlJQjjEpOBE0BgZ7RhXwWdAtwnTsjm+v+LIutEI5aVbMho2h9BG1J23YpnJRMPaA0N4dLInckNG63pvGwdzEenQx16k01PcN/K57EW6t19Qup6DjuIv1EHekNnpc=";
 
-        System.out.println("Done " + ciphered.length() + ", cost " + watch.elapsed(TimeUnit.SECONDS));
+        // ciphered = "L4P3HpGgq2L9YVLWGX/J8oWVZrVNNkCn+sFCzqfBIpW0RxWwlsxpIqRCysWFteFfE6exu+uFOIgLZaLIkxXH3dDRlkD+PwkilX3MlXzhn7tia/ME9JjFFtEujxB3Uj87ZPuO6xYX8DY/LdpgkZ095XHqkMqzMm7Zsa/QDAg6qLM=";
+        String plain = rsaDecrypt(ciphered, keyMap.get("PRIVATE"));
 
-        watch.start();
-        System.out.println("开始解密 " + ciphered.length());
-        String raw = rsaDecrypt(ciphered, keyMap.get("PRIVATE"));
-        watch.stop();
-        System.out.println("Done " + raw.length() + ", cost " + watch.elapsed(TimeUnit.SECONDS));
+        System.out.println("A: " + data + "\nB: " + ciphered + "\nC: " + plain);
+    }
 
-        // System.out.println(ciphered);
-        // System.out.println(RequestUtil.formEncode(ciphered));
-//        System.out.println(raw);
-//        System.out.println(keyMap.get("PUBLIC"));
-//        System.out.println(keyMap.get("PRIVATE"));
+    private static void testQueryString(Map<String, String> keyMap) throws Exception {
+        System.out.println("queryString:");
+        // 包含特殊符号的请求参数值，先做url encode
+        String abc = URLEncoder.encode(" =#", "UTF-8");
+        String data = "name=abc&age=99&phone=33333333333&special=" + abc;
+        // 加密(包含B64编码)
+        String ciphered = rsaEncrypt(data, keyMap.get("PUBLIC"));
+        // url encode
+        ciphered = URLEncoder.encode(ciphered, "UTF-8");
+
+        ciphered = "aKu%2BQLWuuUv9H30yeB0B4UsUJp2NZB26nvR0MyREQpKDmzokTEd3AivqtjjSXOAnZ6c8kV%2FFL4tJXabk6KXreAts93a2gs8lCo%2BQMBtQNBlb%2FhfHxdoV59fqQ6MfDcr3Vv1WWx9U8P7HpokR3yL74Eyyex%2Bu2wAtGYW%2B1WX1Dew4%3D";
+        // 服务端收到数据，先做url decode，再解密(包含B64解码)
+        String plain = URLDecoder.decode(ciphered, "UTF-8");
+        plain = rsaDecrypt(plain, keyMap.get("PRIVATE"));
+
+        System.out.println("A: " + data + "\nB: " + ciphered + "\nC: " + plain);
     }
 }

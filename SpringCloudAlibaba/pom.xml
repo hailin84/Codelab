@@ -17,6 +17,7 @@
         <module>Order</module>
         <module>Stock</module>
         <module>Gateway</module>
+        <module>DataSharding</module>
     </modules>
 
     <properties>

@@ -1,6 +1,9 @@
 .idea/
+.settings/
 .vscode/
 target/
 *.iml
 *.ipr
 *.iws
+.classpath
+.project

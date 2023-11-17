@@ -10,14 +10,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/testdb?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://192.168.56.102:3306/testdb?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: AaZz1234
+    password: AaZz1@#45
 
   redis:
-    host: 127.0.0.1
+    host: 192.168.56.102
     port: 6379
-    password: AaZz1234
+    password: AaZz1@#4501
 
 mybatis-plus:
   configuration:
@@ -27,4 +27,4 @@ mybatis-plus:
 
 logging:
   level:
-    org.springframework: DEBUG
+    org.springframework: INFO

@@ -17,9 +17,27 @@ spring:
             - Path=/order-service/**
           filters:
             - StripPrefix=1
+
+        - id: stock_route
+          uri: lb://stock-service  # 需要转发的地址或者服务名
+          predicates:
+            - Path=/stock-service/**
+          filters:
+            - StripPrefix=1
     # 配置nacos
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: 192.168.56.101:8848
       discovery:
         username: nacos
         password: nacos
+        register-enabled: true
+        ip: 10.0.9.31
+    ## 整合sentinel，配置sentinel控制台的地址
+    sentinel:
+      enabled: true
+      eager: true
+      filter:
+        enabled: false
+      transport:
+        ## 指定控制台的地址
+        dashboard: 192.168.56.101:8858
