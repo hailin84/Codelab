@@ -1,6 +1,6 @@
 package org.alive.idealab.learn.jvm;
 
-import sun.misc.Unsafe;
+//import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -48,11 +48,11 @@ public class OOMDemo {
      * @throws IllegalAccessException
      */
     public static void directMemoryOOM() throws IllegalAccessException {
-        Field unsafeField = Unsafe.class.getDeclaredFields()[0];
-        unsafeField.setAccessible(true);
-        Unsafe unsafe = (Unsafe) unsafeField.get(null);
-        while (true) {
-            unsafe.allocateMemory(1024 * 1024 * 1024);
-        }
+//        Field unsafeField = Unsafe.class.getDeclaredFields()[0];
+//        unsafeField.setAccessible(true);
+//        Unsafe unsafe = (Unsafe) unsafeField.get(null);
+//        while (true) {
+//            unsafe.allocateMemory(1024 * 1024 * 1024);
+//        }
     }
 }
